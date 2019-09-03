@@ -1,7 +1,7 @@
 const fs=require('fs');
-var ext=process.argv[2];
+//var ext=process.argv[2];
 
-fs.readFile('./abbate.'+ext,  function(error, data){
+fs.readFile('./idroterm.pdf',  function(error, data){
    
     if (error) throw err;
 
