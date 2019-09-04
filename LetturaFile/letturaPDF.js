@@ -1,11 +1,10 @@
 const fs=require('fs');
 //var ext=process.argv[2];
 
-<<<<<<< Updated upstream
-fs.readFile('./idroterm.pdf',  function(error, data){
-=======
-fs.readFile('C:/Users/filip/Desktop/NPM prova/Pdf/deltaterm.pdf',  function(error, data){
->>>>>>> Stashed changes
+
+//fs.readFile('./idroterm.pdf',  function(error, data){
+fs.readFile('./deltaterm.pdf',  function(error, data){
+
    
     if (error) throw err;
 
