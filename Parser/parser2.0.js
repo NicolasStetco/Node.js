@@ -25,7 +25,7 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
         const IDfineDeltaterm = "VettoreDatapartenzaOrapartenzaFirma";
 
         const IDinizioEmerrea = "COD.ARTICOLODESCRIZIONEDEIBENI(Natura-Qualità)UMQUANTITÀ";
-        const IDfineEmerrea = "CAUSALEDELTRASPORTOASPETTOESTERIOREDEIBENI";
+        const IDfineEmerrea = "VENDITA+POSA,AVISTA";
 
         const IDinizioIdroterm = "CODICEDESCRIZIONEU.M.QUANTITÀPREZZOUNITARIOPREZZOTOTALE";
         const IDfineIdroterm = "DICHIARAZION";
@@ -71,7 +71,7 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
                             console.log("FINE TABELLA");
                         }*/
 
-            if (riga.replace(/ /g, "") == IDfineDeltaterm || riga.replace(/ /g, "") == IDfineEmerrea ||
+            if (riga.replace(/ /g, "") == IDfineDeltaterm || (riga.replace(/ /g, "") == IDfineEmerrea&&i!=12&&i!=67) ||
                 riga.replace(/ /g, "") == IDfineIdroterm || riga.replace(/ /g, "") == IDfineGrandaClima) {
                 registra = false;
                 //console.log("FINE TABELLA");
@@ -135,9 +135,4 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
         file.write(csvFromArrayOfArrays);
         file.close();
     });
-
-
-
-
-
 });
