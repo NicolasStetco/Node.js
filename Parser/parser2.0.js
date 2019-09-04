@@ -15,16 +15,38 @@ fs.readFile('PDFesempi/Emmeerrei (1).pdf', function (err, buffer) {
         v= new Array();
         header= new Array();
         let x=0;
-       /* v[x]=rows[11];
-        x++;*/
-        for(let i=27; i<52; i++){
+        v[x]=rows[11];
+        x++;
+        
+        var registra=false;
+
+        const IDinizio="COD.ARTICOLODESCRIZIONEDEIBENI(Natura-Qualità)UMQUANTITÀ";    
+        let IDfine="CAUSALEDELTRASPORTOASPETTOESTERIOREDEIBENI";
+        for(let i=0; i<rows.length; i++){
             //console.log(rows[i]);
-            v[x]=rows[i];
-            x++;
+
+            let riga=rows[i].join("");
+
+            if(riga.replace(/ /g,"")==IDinizio){
+                registra=true;
+                console.log("ABBATEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            }
+
+            
+            if(riga.replace(/ /g,"")==IDfine){
+                registra=false;
+                console.log("FUNZIONA");
+            }
+
+            if(registra==true){
+                v[x]=rows[i];
+                x++;
+            }
         }
+;
 
 
-        //console.log(v);
+        console.log(rows);
 
         
 /*
@@ -32,7 +54,8 @@ fs.readFile('PDFesempi/Emmeerrei (1).pdf', function (err, buffer) {
         console.log('Riga n°: '+i+' record:'+rows[i]);
        }*/
 
-
+       
+       //console.log(rows.length);
 
 
        const csvFromArrayOfArrays = convertArrayToCSV(v, {
@@ -43,9 +66,14 @@ fs.readFile('PDFesempi/Emmeerrei (1).pdf', function (err, buffer) {
       console.log(csvFromArrayOfArrays);
 
 
-    var file=fs.createWriteStream('documento.csv','utf8');
+    var file=fs.createWriteStream('documenti.csv','utf8');
     file.write(csvFromArrayOfArrays);
     file.close();
     });
+
+
+
+
+
 });
 
