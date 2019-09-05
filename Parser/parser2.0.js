@@ -1,8 +1,6 @@
 const pdf2table = require('pdf2table');
 const fs = require('fs');
-const {
-    convertArrayToCSV
-} = require('convert-array-to-csv');
+const { convertArrayToCSV } = require('convert-array-to-csv');
 const converter = require('convert-array-to-csv');
 
 var registra = false;
@@ -11,9 +9,26 @@ header = new Array();
 let x = 0;
 const nomeFile=process.argv[2].toString();
 
+//Stringhe inizio/fine tabella di ogni bolla
+const IDinizioDeltaterm = "CodicearticoloDescrizioneQuantità03035080047UMPrezzoSc%03035080047ImportoIVA%";
+const IDfineDeltaterm = "VettoreDatapartenzaOrapartenzaFirma";
+
+const IDinizioEmerrea = "COD.ARTICOLODESCRIZIONEDEIBENI(Natura-Qualità)UMQUANTITÀ";
+const IDfineEmerrea = "CAUSALEDELTRASPORTOASPETTOESTERIOREDEIBENI"
+//const IDfineEmerrea = "VENDITA+POSA,AVISTA";
+
+const IDinizioIdroterm = "CODICEDESCRIZIONEU.M.QUANTITÀPREZZOUNITARIOPREZZOTOTALE";
+const IDfineIdroterm = "DICHIARAZIONE";
+
+const IDinizioGrandaClima = "CodiceDescrizionearticoliU.M.Quantità";
+const IDfineGrandaClima = "TrasportoamezzoVettoreAddebitotrasporto:Firmaconducente";
+
+
+//lettura del pdf
 fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
     if (err) return console.log(err);
 
+    //tabulazione del pdf, rows è un vettore di vettori
     pdf2table.parse(buffer, function (err, rows, rowsdebug) {
 
         if (err) return console.log(err);
@@ -21,17 +36,7 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
         //console.log(rows);
         //v[x]=rows[11];
 
-        const IDinizioDeltaterm = "CodicearticoloDescrizioneQuantità03035080047UMPrezzoSc%03035080047ImportoIVA%";
-        const IDfineDeltaterm = "VettoreDatapartenzaOrapartenzaFirma";
-
-        const IDinizioEmerrea = "COD.ARTICOLODESCRIZIONEDEIBENI(Natura-Qualità)UMQUANTITÀ";
-        const IDfineEmerrea = "VENDITA+POSA,AVISTA";
-
-        const IDinizioIdroterm = "CODICEDESCRIZIONEU.M.QUANTITÀPREZZOUNITARIOPREZZOTOTALE";
-        const IDfineIdroterm = "DICHIARAZION";
-
-        const IDinizioGrandaClima = "CodiceDescrizionearticoliU.M.Quantità";
-        const IDfineGrandaClima = "TrasportoamezzoVettoreAddebitotrasporto:Firmaconducente";
+        
 
         /*
         console.log('QUESTO è L HEADER ' +IDinizioDeltaterm);
@@ -71,6 +76,7 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
                             console.log("FINE TABELLA");
                         }*/
 
+            //quando viene identificata una stringa di inizio/fine, il valore della booleana cambia
             if (riga.replace(/ /g, "") == IDfineDeltaterm || (riga.replace(/ /g, "") == IDfineEmerrea&&i!=12&&i!=67) ||
                 riga.replace(/ /g, "") == IDfineIdroterm || riga.replace(/ /g, "") == IDfineGrandaClima) {
                 registra = false;
@@ -86,6 +92,7 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
 
             }
 
+            //quando è true (cioè dopo l'identificazione di una stringa di inizio) inserisce in un vettore v tutti i record che compongono la tabella
             if (registra == true) {
                 //console.log(x);
                 //console.log("tabella");
@@ -95,44 +102,31 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
             }
 
 
-
-            /*
-            let aux=0;
-            if(riga.replace(/ /g,"")==IDinizio){
-                aux=i;
-                while(rows[aux]!=IDfine){
-                    v[aux]=rows[aux];
-                    aux++;
-                }
-                i=aux;
-            }
-*/
-
         }
 
         //console.log(rows);
 
 
+        /*
         for (let i = 0; i < 100; i++) {
             console.log('Riga n°: ' + i + ' record:' + rows[i]);
-        }
+        }*/
 
 
         //console.log(rows.length);
 
-
-        const csvFromArrayOfArrays = convertArrayToCSV(v, {
+        //viene creato il csv con i record del vettore v
+        const csvFromArrayOfArrays = convertArrayToCSV(v,'utf8', {
             header,
             separator: ';'
         });
         console.log(" ");
         console.log(csvFromArrayOfArrays);
-        //let abbate=rows[12].join("");
-        //console.log(abbate.replace(/ /g,""));
         //console.log(v);
 
         var file = fs.createWriteStream(nomeFile+'.csv', 'utf8');
         file.write(csvFromArrayOfArrays);
         file.close();
+        console.log(".csv creato");
     });
 });
