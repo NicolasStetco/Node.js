@@ -34,6 +34,7 @@ readInterface.on('line', function(error,line) {
     //if (error) throw error
     console.log(line);
 });*/
+/*
 var pdfText = require('pdf-text')
 
 tabella= new Array();
@@ -72,4 +73,4 @@ pdfText(path, function(err, chunks) {
   console.log(tabella.length);
 });
 
-
+*/

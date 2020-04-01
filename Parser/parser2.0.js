@@ -7,7 +7,7 @@ var registra = false;
 v = new Array();
 header = new Array();
 let x = 0;
-const nomeFile=process.argv[2].toString();
+const nomeFile=process.argv[2]
 
 //Stringhe inizio/fine tabella di ogni bolla
 const IDinizioDeltaterm = "CodicearticoloDescrizioneQuantità03035080047UMPrezzoSc%03035080047ImportoIVA%";
@@ -116,7 +116,7 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
         //console.log(rows.length);
 
         //viene creato il csv con i record del vettore v
-        const csvFromArrayOfArrays = convertArrayToCSV(v,'utf8', {
+        const csvFromArrayOfArrays = convertArrayToCSV(v, {
             header,
             separator: ';'
         });
@@ -124,9 +124,9 @@ fs.readFile('PDFesempi/'+nomeFile+'.pdf', function (err, buffer) {
         console.log(csvFromArrayOfArrays);
         //console.log(v);
 
-        var file = fs.createWriteStream(nomeFile+'.csv', 'utf8');
+        var file = fs.createWriteStream(nomeFile+'.csv');
         file.write(csvFromArrayOfArrays);
         file.close();
-        console.log(".csv creato");
+        //console.log(".csv creato");
     });
 });
